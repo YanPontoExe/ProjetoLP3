@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tremapp/game.dart';
+
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -6,9 +8,12 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+
       routes: {
+          "/game": (context) => const Game(),
       },
-      initialRoute: "/",
+
+      initialRoute: "/game",
     );   
   }
 }

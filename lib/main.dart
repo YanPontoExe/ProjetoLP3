@@ -11,6 +11,7 @@ const firebaseConfig = FirebaseOptions(
   appId: "1:1046779146859:web:5792d58084e2afdbc2772e",
   measurementId: "G-XEN821YR0M"
 );
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: firebaseConfig);
