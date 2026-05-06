@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tremapp/game.dart';
+import 'game.dart';
+import 'login.dart';
 
 
 class App extends StatelessWidget {
@@ -11,9 +12,10 @@ class App extends StatelessWidget {
 
       routes: {
           "/game": (context) => const Game(),
+          "/login": (context) => LoginPage(),
       },
 
-      initialRoute: "/game",
+      initialRoute: "/login",
     );   
   }
 }

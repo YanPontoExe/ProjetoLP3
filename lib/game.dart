@@ -12,28 +12,7 @@ class Game extends StatelessWidget {
         child: Column(
           children: [
             Text("M.E.T.R.O.", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-            Row(
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  color: Colors.red,
-                  margin: EdgeInsets.all(10),
-                ),
-                Container(
-                  width: 50,
-                  height: 50,
-                  color: Colors.green,
-                  margin: EdgeInsets.all(10),
-                ),
-                Container(
-                  width: 50,
-                  height: 50,
-                  color: Colors.blue,
-                  margin: EdgeInsets.all(10),
-                ),
-              ],
-            )
+            
           ],
 
         ),
