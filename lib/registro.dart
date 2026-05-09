@@ -1,24 +1,34 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class RegistroPage extends StatelessWidget {
+  //TextEditingController txtUsername = TextEditingController();
   final TextEditingController txtEmail = TextEditingController();
   final TextEditingController txtSenha = TextEditingController();
 
-  Future logar(BuildContext context) async {
+  RegistroPage({super.key});
+
+  Future registrar(BuildContext context) async {
     try {
-      var credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: txtEmail.text, //'mestreyan@devmaster.com'
-        password: txtSenha.text,
+      var credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: txtEmail.text,
+        password: txtSenha.text
       );
 
-      await credential.user!.reload();
+      //await credential.user?.updateDisplayName(txtUsername.text);
 
-      Navigator.of(context).pushReplacementNamed('/game');
+    //txtUsername.clear();
+    txtEmail.clear();
+    txtSenha.clear();
+
+    Navigator.of(context)
+      ..pop()
+      ..pushReplacementNamed('/game');
+  
     } catch (erro) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Erro ao logar: ${erro.toString()}"),
+          content: Text("Erro ao fazer registro: ${erro.toString()}"),
           backgroundColor: const Color.fromARGB(255, 240, 104, 94),
         ),
       );
@@ -35,7 +45,7 @@ class LoginPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text("M.E.T.R.O", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900)),
-          Text("LOGIN", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          Text("REGISTRO", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -50,7 +60,30 @@ class LoginPage extends StatelessWidget {
           spacing: 12,
           mainAxisAlignment: .center,
           children: [
-        
+            
+            // TextField(
+            //   controller: txtUsername,
+            //   style: TextStyle(color: Colors.white),
+            //   decoration: InputDecoration(
+            //     enabledBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(
+            //         color: Color.fromRGBO(253, 128, 46, 1.0),
+            //         width: 2.0,
+            //       ),
+            //     ),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(
+            //         color: Color.fromRGBO(253, 128, 46, 1.0),
+            //         width: 2.5,
+            //       ),
+            //     ),
+            //     labelText: "Username",
+            //     labelStyle: TextStyle(color: Color.fromRGBO(253, 128, 46, 1.0)),
+            //     prefixIcon: Icon(Icons.person_outline),
+            //     prefixIconColor: Color.fromRGBO(253, 128, 46, 1.0),
+            //   ),
+            // ), // TextField
+
             TextField(
               controller: txtEmail,
               style: TextStyle(color: Colors.white),
@@ -59,7 +92,6 @@ class LoginPage extends StatelessWidget {
                   borderSide: BorderSide(
                     color: Color.fromRGBO(253, 128, 46, 1.0),
                     width: 2.0,
-                    
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -100,8 +132,8 @@ class LoginPage extends StatelessWidget {
             ), // TextField
 
             ElevatedButton(
-              onPressed: () => logar(context),
-              child: Text("Entrar"),
+              onPressed: () => registrar(context),
+              child: Text("Registrar"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromRGBO(253, 128, 46, 1.0),
                 foregroundColor: Colors.white,
@@ -111,8 +143,8 @@ class LoginPage extends StatelessWidget {
             ),
 
             TextButton(
-              onPressed: () => Navigator.pushNamed(context, "/registro"),
-              child: Text("Registrar"),
+              onPressed: () => Navigator.pop(context),
+              child: Text("Login"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromRGBO(253, 128, 46, 1.0),
                 foregroundColor: Colors.white,
