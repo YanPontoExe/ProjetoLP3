@@ -48,6 +48,7 @@ class RegistroPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color.fromRGBO(64, 61, 57, 1),
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Color.fromRGBO(253, 128, 46, 1.0), //COR
         title: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

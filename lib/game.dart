@@ -7,6 +7,7 @@ class Game extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Color(Colors.grey[500]!.value),
         title: Text("M.E.T.R.O.", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900)),
         actions: [
