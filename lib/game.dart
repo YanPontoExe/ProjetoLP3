@@ -6,17 +6,24 @@ class Game extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(Colors.grey[500]!.value),
+        title: Text("M.E.T.R.O.", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900)),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed('/login');
+            },
+            icon: Icon(Icons.logout),
+          )
+        ],
+      ),
       backgroundColor: Color(Colors.grey[500]!.value),
       body: Container(
         alignment: .center,
-        child: Column(
-          children: [
-            Text("M.E.T.R.O.", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-            
-          ],
-
-        ),
+        child: Text("JOGO", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)
       ),
-    );
+    )
+  );
   }
 }

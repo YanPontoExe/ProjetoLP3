@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegistroPage extends StatelessWidget {
-  //TextEditingController txtUsername = TextEditingController();
+  final TextEditingController txtUsername = TextEditingController();
   final TextEditingController txtEmail = TextEditingController();
   final TextEditingController txtSenha = TextEditingController();
 
@@ -15,15 +16,22 @@ class RegistroPage extends StatelessWidget {
         password: txtSenha.text
       );
 
-      //await credential.user?.updateDisplayName(txtUsername.text);
+      await FirebaseFirestore.instance
+        .collection('usuarios')        
+        .doc(credential.user!.uid)     
+        .set({
+          'nome': txtUsername.text,
+          'pontuacao': 0,              
+          'email': txtEmail.text,
+        });
 
-    //txtUsername.clear();
+      await credential.user?.updateDisplayName(txtUsername.text);
+
+    txtUsername.clear();
     txtEmail.clear();
     txtSenha.clear();
 
-    Navigator.of(context)
-      ..pop()
-      ..pushReplacementNamed('/game');
+    Navigator.of(context).pushReplacementNamed('/game');
   
     } catch (erro) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -61,28 +69,28 @@ class RegistroPage extends StatelessWidget {
           mainAxisAlignment: .center,
           children: [
             
-            // TextField(
-            //   controller: txtUsername,
-            //   style: TextStyle(color: Colors.white),
-            //   decoration: InputDecoration(
-            //     enabledBorder: OutlineInputBorder(
-            //       borderSide: BorderSide(
-            //         color: Color.fromRGBO(253, 128, 46, 1.0),
-            //         width: 2.0,
-            //       ),
-            //     ),
-            //     focusedBorder: OutlineInputBorder(
-            //       borderSide: BorderSide(
-            //         color: Color.fromRGBO(253, 128, 46, 1.0),
-            //         width: 2.5,
-            //       ),
-            //     ),
-            //     labelText: "Username",
-            //     labelStyle: TextStyle(color: Color.fromRGBO(253, 128, 46, 1.0)),
-            //     prefixIcon: Icon(Icons.person_outline),
-            //     prefixIconColor: Color.fromRGBO(253, 128, 46, 1.0),
-            //   ),
-            // ), // TextField
+            TextField(
+              controller: txtUsername,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color.fromRGBO(253, 128, 46, 1.0),
+                    width: 2.0,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color.fromRGBO(253, 128, 46, 1.0),
+                    width: 2.5,
+                  ),
+                ),
+                labelText: "Username",
+                labelStyle: TextStyle(color: Color.fromRGBO(253, 128, 46, 1.0)),
+                prefixIcon: Icon(Icons.person_outline),
+                prefixIconColor: Color.fromRGBO(253, 128, 46, 1.0),
+              ),
+            ), // TextField
 
             TextField(
               controller: txtEmail,
