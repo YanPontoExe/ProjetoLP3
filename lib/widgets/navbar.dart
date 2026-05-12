@@ -20,12 +20,12 @@ class GameNavBar extends StatelessWidget {
     return CircleNavBar(
       activeIcons: const [
         Icon(Icons.leaderboard, color: Color.fromRGBO(253, 128, 46, 1.0)),
-        Icon(Icons.gamepad, color: Color.fromRGBO(253, 128, 46, 1.0)),
+        Icon(Icons.play_arrow_rounded, color: Color.fromRGBO(253, 128, 46, 1.0)),
         Icon(Icons.logout, color: Color.fromRGBO(253, 128, 46, 1.0)),
       ],
       inactiveIcons: const [
         Icon(Icons.leaderboard, color: Color.fromRGBO(253, 128, 46, 1.0)),
-        Icon(Icons.gamepad, color: Color.fromRGBO(253, 128, 46, 1.0)),
+        Icon(Icons.play_arrow_rounded, color: Color.fromRGBO(253, 128, 46, 1.0)),
         Icon(Icons.logout, color: Color.fromRGBO(253, 128, 46, 1.0)),
       ],
       color: Color.fromRGBO(64, 61, 57, 1),

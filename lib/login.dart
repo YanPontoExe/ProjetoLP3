@@ -32,12 +32,12 @@ class LoginPage extends StatelessWidget {
       
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color.fromRGBO(253, 128, 46, 1.0), //COR
+        backgroundColor: Colors.transparent, //COR
         title: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("M.E.T.R.O", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900)),
-          Text("LOGIN", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          Text("M.E.T.R.O", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: Color.fromRGBO(253, 128, 46, 1.0))),
+          Text("LOGIN", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color.fromRGBO(253, 128, 46, 1.0)),
           ),
         ],
       ),

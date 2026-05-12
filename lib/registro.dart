@@ -49,12 +49,12 @@ class RegistroPage extends StatelessWidget {
       backgroundColor: Color.fromRGBO(64, 61, 57, 1),
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color.fromRGBO(253, 128, 46, 1.0), //COR
+        backgroundColor: Colors.transparent, //COR
         title: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("M.E.T.R.O", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900)),
-          Text("REGISTRO", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          Text("M.E.T.R.O", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: Color.fromRGBO(253, 128, 46, 1.0))),
+          Text("REGISTRO", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color.fromRGBO(253, 128, 46, 1.0)),
           ),
         ],
       ),

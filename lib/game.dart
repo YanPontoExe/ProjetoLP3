@@ -37,8 +37,8 @@ class _GameState extends State<Game>
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color(Colors.grey[500]!.value),
-        title: Text("M.E.T.R.O.", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900)),
+        backgroundColor: Color(Colors.transparent.value),
+        title: Text("M.E.T.R.O.", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: Color.fromRGBO(253, 128, 46, 1.0))),
         // actions: [
         //   IconButton(
         //     onPressed: () {
