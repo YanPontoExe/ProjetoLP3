@@ -14,7 +14,7 @@ class LoginPage extends StatelessWidget {
 
       await credential.user!.reload();
 
-      Navigator.of(context).pushReplacementNamed('/game');
+      Navigator.of(context).pushReplacementNamed('/home');
     } catch (erro) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
