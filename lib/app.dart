@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'game.dart';
+import 'game_screen.dart';
 import 'home.dart';
 import 'ranking.dart';
 import 'login.dart';
@@ -15,7 +15,7 @@ class App extends StatelessWidget {
 
       // Rotas principais do app: login/registro são telas independentes e /game abre o shell com navbar.
       routes: {
-          "/game": (context) => const Game(),
+          "/game": (context) => const GameScreen(),
           "/login": (context) => LoginPage(),
           "/registro": (context) => RegistroPage(),
           "/ranking": (context) => const Ranking(),
