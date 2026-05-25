@@ -1,15 +1,13 @@
-// lib/widgets/board_ui_widget.dart
-//
-// BoardUiWidget — renderiza o grid 6×5 do jogo (UI only, sem lógica de jogo).
-//
-// É um StatelessWidget porque ele não tem estado próprio:
-// recebe o board pronto e só exibe.
+/*lib/widgets/board_ui_widget.dart
+
+BoardUiWidget - renderiza o grid 6×5 do jogo (UI only, sem lógica de jogo).
+
+É um StatelessWidget porque ele não tem estado próprio:
+recebe o board pronto e só exibe.*/
 
 import 'package:flutter/material.dart';
 
-// ──────────────────────────────────────────────
 // Estados das tiles
-// ──────────────────────────────────────────────
 
 enum TileState {
   empty,   // célula vazia
@@ -19,9 +17,7 @@ enum TileState {
   absent,  // letra não existe na palavra (cinza)
 }
 
-// ──────────────────────────────────────────────
 // Estrutura de dados de uma tile
-// ──────────────────────────────────────────────
 
 class UiTile {
   final String letter;
@@ -33,9 +29,7 @@ class UiTile {
   });
 }
 
-// ──────────────────────────────────────────────
-// BoardUiWidget — widget principal do board
-// ──────────────────────────────────────────────
+// BoardUiWidget - widget principal do board
 
 class BoardUiWidget extends StatelessWidget {
   final List<List<UiTile>> board;
@@ -57,9 +51,7 @@ class BoardUiWidget extends StatelessWidget {
   }
 }
 
-// ──────────────────────────────────────────────
-// _RowWidget — uma linha do board (5 tiles)
-// ──────────────────────────────────────────────
+// _RowWidget - uma linha do board (5 tiles)
 
 class _RowWidget extends StatelessWidget {
   final List<UiTile> tiles;
@@ -78,9 +70,7 @@ class _RowWidget extends StatelessWidget {
   }
 }
 
-// ──────────────────────────────────────────────
-// _TileWidget — célula individual
-// ──────────────────────────────────────────────
+// _TileWidget - célula individual
 
 class _TileWidget extends StatelessWidget {
   final UiTile tile;

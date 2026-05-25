@@ -56,7 +56,6 @@ class _GameScreenState extends State<GameScreen> {
                 ),
                 labelText: "Digite sua palavra",
                 labelStyle: TextStyle(color: Color.fromRGBO(253, 128, 46, 1.0)),
-                prefixIconColor: Color.fromRGBO(253, 128, 46, 1.0),
               ),
             ), // TextField
         ),

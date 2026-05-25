@@ -31,7 +31,7 @@ class RegistroPage extends StatelessWidget {
     txtEmail.clear();
     txtSenha.clear();
 
-    Navigator.of(context).pushReplacementNamed('/game');
+    Navigator.of(context).pushReplacementNamed('/home');
   
     } catch (erro) {
       ScaffoldMessenger.of(context).showSnackBar(
