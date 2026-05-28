@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'game_screen.dart';
 import 'home.dart';
 import 'ranking.dart';
 import 'login.dart';

@@ -6,6 +6,13 @@ Guia para implementar a lógica do jogo no projeto **M.E.T.R.O.** (clone do TERM
 
 > Estado analisado: branch `main`, commit `b5b8674`.
 
+> **⚠️ Status de implementação (atualizado):** os Passos 1 a 9 foram **concluídos**, mais
+> vários itens do Passo 10 (jogar de novo, animação de flip). Ao longo do caminho houve
+> alguns **desvios do plano original** — todos documentados na seção
+> [Estado de implementação](#estado-de-implementação--o-que-foi-realmente-feito) no fim deste
+> documento. Para entender o app inteiro (todas as telas, arquitetura e conceitos), veja o
+> documento complementar [DOC_APP.md](DOC_APP.md).
+
 ---
 
 # PARTE 1 — Entenda antes de codar
@@ -27,10 +34,15 @@ Sair de uma tela de jogo **só visual** para um jogo jogável:
 | [lib/home.dart](lib/home.dart) | Shell (AppBar + PageView + navbar) | OK — abre na aba do jogo (`activeIndex = 1`) |
 | [lib/login.dart](lib/login.dart) | Auth + navega p/ `/home` | OK |
 | [lib/registro.dart](lib/registro.dart) | Cria doc do usuário no Firestore | OK, mas navega p/ `/game` (bug) |
-| [lib/widgets/quadroJogo.dart](lib/widgets/quadroJogo.dart) | `BoardUiWidget`, `UiTile`, `TileState` (UI pura) | **Reaproveitar 100%** |
+| [lib/widgets/quadroJogo.dart](lib/widgets/quadroJogo.dart) | `BoardUiWidget`, `UiTile`, `TileState` (UI pura) | **✅ + animação de flip nas tiles** |
 | [lib/widgets/navbar.dart](lib/widgets/navbar.dart) | Navbar circular | OK |
-| [lib/ranking.dart](lib/ranking.dart) | Lista `usuarios` por `pontuacao desc` | **✅ JÁ FEITO** |
-| [lib/game_screen.dart](lib/game_screen.dart) | Tela do jogo | Só esqueleto visual, **sem lógica** |
+| [lib/ranking.dart](lib/ranking.dart) | Lista `usuarios` por `pontuacao desc` | **✅ + botão "como pontuar"** |
+| [lib/game_screen.dart](lib/game_screen.dart) | Tela do jogo | **✅ plugada ao controller (lógica completa)** |
+| [lib/game/data/palavras.dart](lib/game/data/palavras.dart) | Listas de palavras + palavra do dia/aleatória | **✅ FEITO (Passo 5)** |
+| [lib/game/models/game_status.dart](lib/game/models/game_status.dart) | `enum GameStatus` | **✅ FEITO (Passo 2)** |
+| [lib/game/logic/guess_evaluator.dart](lib/game/logic/guess_evaluator.dart) | Coloração das letras | **✅ FEITO (Passo 3)** |
+| [lib/game/logic/game_controller.dart](lib/game/logic/game_controller.dart) | Estado da partida (`ChangeNotifier`) | **✅ FEITO (Passo 6)** |
+| [lib/game/services/score_service.dart](lib/game/services/score_service.dart) | Soma pontos ao vencer | **✅ FEITO (Passo 9)** |
 
 ### Problemas a corrigir (entram no Passo 1)
 1. **Global `inputGuess`** em [game_screen.dart:6](lib/game_screen.dart#L6) — estado tem que ser local. Global quebra hot-reload e testes.
@@ -93,7 +105,7 @@ Essa separação é o que permite testar a regra do jogo sem abrir tela (`flutte
 
 > Sugestão: cada passo (ou par de passos) vira um PR pequeno e testável. Rode `flutter analyze` ao fim de cada um.
 
-## Passo 1 — Limpeza preparatória
+## ✅ Passo 1 — Limpeza preparatória
 
 **Objetivo:** remover o que vai atrapalhar, antes de criar qualquer coisa nova.
 
@@ -103,7 +115,7 @@ Essa separação é o que permite testar a regra do jogo sem abrir tela (`flutte
 
 Ao terminar, o app ainda roda igual — só sem a global e sem o fluxo quebrado.
 
-## Passo 2 — Criar `game/models/game_status.dart`
+## ✅ Passo 2 — Criar `game/models/game_status.dart`
 
 **Objetivo:** representar em que fase a partida está.
 
@@ -115,7 +127,7 @@ enum GameStatus { playing, won, lost }
 
 > `TileState` e `UiTile` você **não precisa criar** — já existem em [quadroJogo.dart](lib/widgets/quadroJogo.dart). Se for usar `const UiTile(...)` no controller, adicione `const` ao construtor de `UiTile` agora.
 
-## Passo 3 — Criar `game/logic/guess_evaluator.dart` (o coração)
+## ✅ Passo 3 — Criar `game/logic/guess_evaluator.dart` (o coração)
 
 **Objetivo:** dada uma palavra chutada e o gabarito, devolver as 5 tiles já coloridas.
 
@@ -165,7 +177,7 @@ List<UiTile> evaluateGuess(String guess, String answer) {
 }
 ```
 
-## Passo 4 — Testar o evaluator
+## ✅ Passo 4 — Testar o evaluator
 
 **Objetivo:** provar que a coloração está certa antes de plugar em qualquer tela.
 
@@ -184,7 +196,7 @@ flutter test
 
 Só passe para o Passo 5 com tudo verde aqui.
 
-## Passo 5 — Criar `game/data/palavras.dart`
+## ✅ Passo 5 — Criar `game/data/palavras.dart`
 
 **Objetivo:** ter de onde tirar a palavra-resposta e contra o que validar o chute.
 
@@ -207,7 +219,7 @@ String palavraDoDia(List<String> pool) {
 }
 ```
 
-## Passo 6 — Criar `game/logic/game_controller.dart`
+## ✅ Passo 6 — Criar `game/logic/game_controller.dart`
 
 **Objetivo:** guardar o estado da partida e avisar a tela quando ele muda. É um `ChangeNotifier`.
 
@@ -264,7 +276,7 @@ class GameController extends ChangeNotifier {
 }
 ```
 
-## Passo 7 — Testar o controller
+## ✅ Passo 7 — Testar o controller
 
 **Objetivo:** garantir as transições de estado sem abrir tela.
 
@@ -277,7 +289,7 @@ Em `test/game_controller_test.dart`, crie um controller com um gabarito conhecid
 
 Rode `flutter test`.
 
-## Passo 8 — Plugar a UI em [game_screen.dart](lib/game_screen.dart)
+## ✅ Passo 8 — Plugar a UI em [game_screen.dart](lib/game_screen.dart)
 
 **Objetivo:** a tela passa a refletir o controller (e nada mais).
 
@@ -306,7 +318,7 @@ Widget build(BuildContext context) {
 
 > O `PageView` do [home.dart](lib/home.dart) mantém a `GameScreen` viva ao trocar de aba, então o controller sobrevive sozinho. (Cuidado só se um dia trocar por `IndexedStack`.)
 
-## Passo 9 — Criar `game/services/score_service.dart` e somar ao vencer
+## ✅ Passo 9 — Criar `game/services/score_service.dart` e somar ao vencer
 
 **Objetivo:** alimentar o `pontuacao` que o ranking já lê.
 
@@ -329,12 +341,58 @@ Future<void> registrarVitoria({required int tentativas}) async {
 
 > O doc já nasce com `pontuacao: 0` em [registro.dart:22](lib/registro.dart#L22) — aqui só incrementa. Envolva em `try/catch` para tolerar falha de rede.
 
-## Passo 10 — Polimento (opcional)
+## Passo 10 — Polimento (parcial)
 
-- Botão "jogar de novo" (recria o controller com outra palavra).
-- Teclado virtual com letras coloridas conforme já descobertas.
-- Animação de flip nas tiles (`AnimatedRotation`/`AnimatedSwitcher`).
-- Persistir a partida do dia com `shared_preferences` (não dá pra trapacear recarregando).
+- ✅ Botão "jogar de novo" (recria a partida com **palavra aleatória** — ver desvio nº 4 abaixo).
+- ✅ Animação de flip nas tiles (feita com `AnimationController` + `Transform`, **não** `AnimatedRotation` — ver desvio nº 5).
+- ⬜ Teclado virtual com letras coloridas conforme já descobertas.
+- ⬜ Persistir a partida do dia com `shared_preferences` (não dá pra trapacear recarregando).
+
+---
+
+# Estado de implementação — o que foi realmente feito
+
+Esta seção registra o que foi entregue além do esqueleto e, principalmente, **onde a
+implementação divergiu do plano** — leia antes de mexer no código.
+
+## Resumo do que está pronto
+
+- **Passos 1–9 completos** e cobertos por testes ([test/guess_evaluator_test.dart](test/guess_evaluator_test.dart) e [test/game_controller_test.dart](test/game_controller_test.dart) — 9 testes passando).
+- **Botão "Jogar de novo"** ao fim da partida ([game_screen.dart](lib/game_screen.dart)).
+- **Animação de flip** na revelação das tiles ([quadroJogo.dart](lib/widgets/quadroJogo.dart)).
+- **Botão "como pontuar"** (ícone ⓘ) na tela de ranking ([ranking.dart](lib/ranking.dart)).
+
+## Desvios do plano (importantes)
+
+1. **`currentRow` mudou de definição.** O plano dizia "primeira linha toda `empty`"
+   ([game_controller.dart:256](lib/game/logic/game_controller.dart#L256) no esqueleto). Isso **tinha bug**: ao digitar, as tiles
+   viram `filled` e a linha deixava de ser "toda vazia", fazendo o índice pular para a
+   linha de baixo. A definição correta é "primeira linha em que nenhuma tile está
+   colorida" (aceita `empty` **ou** `filled`). Veja o comentário denso no getter.
+
+2. **`score_service` usa `set(merge:true)`, não `update`.** O plano sugeria `.update()`
+   ([Passo 9](#-passo-9--criar-gameservicesscore_servicedart-e-somar-ao-vencer)). Mas `update` **lança erro se o documento `usuarios/{uid}` não
+   existir** (conta criada fora do fluxo de registro), e o `try/catch` engolia o erro em
+   silêncio — pontos nunca apareciam. Trocado por `set({...}, SetOptions(merge: true))`,
+   que soma existindo o doc ou não. O `catch` agora dá `debugPrint`.
+
+3. **`GameScreen` precisou de `AutomaticKeepAliveClientMixin`.** O plano afirmava que o
+   `PageView` mantinha a tela viva ao trocar de aba ([nota do Passo 8](#-passo-8--plugar-a-ui-em-libgame_screendart)). Na prática o `State`
+   era descartado e a partida recomeçava do zero (com a mesma palavra do dia). O mixin
+   (`wantKeepAlive => true` + `super.build(context)`) resolve.
+
+4. **"Jogar de novo" sorteia palavra ALEATÓRIA**, não a palavra do dia. Como repetir a
+   palavra do dia daria sempre a mesma resposta, adicionamos `palavraAleatoria(pool)` em
+   [palavras.dart](lib/game/data/palavras.dart) e um método `reiniciar({answer})` no controller. (Nota de design: cada
+   vitória soma pontos, então jogar várias vezes acumula pontuação no ranking.)
+
+5. **Flip feito "na mão" com `AnimationController` + `Transform`** (giro em `rotateY`,
+   horizontal), não com `AnimatedRotation`/`AnimatedSwitcher` como o plano cogitava. O
+   disparo é detectado em `didUpdateWidget` (transição não-revelado → revelado) e
+   escalonado por coluna. Detalhes no cabeçalho de `_TileWidget` em [quadroJogo.dart](lib/widgets/quadroJogo.dart).
+
+6. **Getters extras no controller:** além de `board`/`status`, expusemos `answer`
+   (banner de derrota e testes) e `currentGuess` (a tela usa para reconciliar o `TextField`).
 
 ---
 

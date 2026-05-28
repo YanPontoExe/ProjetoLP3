@@ -14,8 +14,10 @@ class LoginPage extends StatelessWidget {
 
       await credential.user!.reload();
 
+      if (!context.mounted) return; // tela pode ter sido descartada durante o await
       Navigator.of(context).pushReplacementNamed('/home');
     } catch (erro) {
+      if (!context.mounted) return; // mesma proteção para a SnackBar de erro
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Erro ao logar: ${erro.toString()}"),

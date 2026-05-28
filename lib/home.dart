@@ -40,7 +40,7 @@ class _HomeState extends State<Home>
       // Barra superior fixa com o nome do app.
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color(Colors.transparent.value),
+        backgroundColor: Colors.transparent,
         title: Text("M.E.T.R.O.", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: Color.fromRGBO(253, 128, 46, 1.0))),
       ),
       backgroundColor: const Color.fromRGBO(64, 61, 57, 1),
