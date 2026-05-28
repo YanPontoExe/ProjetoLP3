@@ -3,7 +3,6 @@ import 'widgets/quadroJogo.dart';
 
 const int kWordLength  = 5; // tamanho da palavra (fixo em 5 para este jogo)
 const int kMaxAttempts = 6; // numero max de tentativas (quantidade de linhas do board)
-var inputGuess = ""; // palavra sendo digitada no momento
 
 // Conteúdo isolado da lógica principal do jogo; fica embutido no shell Game.
 class GameScreen extends StatefulWidget {
@@ -36,7 +35,6 @@ class _GameScreenState extends State<GameScreen> {
           child: 
           TextField(
               scrollPadding: EdgeInsets.only(bottom: 40),
-              controller: inputGuess.isEmpty ? null : TextEditingController(text: inputGuess),
               textAlign: TextAlign.center,
               maxLength: kWordLength,
               style: TextStyle(color: Colors.white),

@@ -15,7 +15,7 @@ class App extends StatelessWidget {
 
       // Rotas principais do app: login/registro são telas independentes e /game abre o shell com navbar.
       routes: {
-          // "/game": (context) => const GameScreen(),
+          "/game": (context) => const Home(),
           "/login": (context) => LoginPage(),
           "/registro": (context) => RegistroPage(),
           "/ranking": (context) => const Ranking(),
