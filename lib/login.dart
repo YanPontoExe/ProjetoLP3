@@ -43,17 +43,24 @@ class LoginPage extends StatelessWidget {
       ),
       ),
 
-      body: Container(
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(64, 61, 57, 1), //COR
-          ),
-        margin: EdgeInsets.all(20),
-        child: Column(
-          spacing: 12,
-          mainAxisAlignment: .center,
-          children: [
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final contentWidth = (constraints.maxWidth - 40).clamp(0.0, 420.0).toDouble();
+
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight - 40),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: contentWidth),
+                    child: Column(
+                      spacing: 12,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
         
-            TextField(
+                        TextField(
               controller: txtEmail,
               style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
@@ -75,9 +82,9 @@ class LoginPage extends StatelessWidget {
                 prefixIcon: Icon(Icons.email_outlined),
                 prefixIconColor: Color.fromRGBO(253, 128, 46, 1.0),
               ),
-            ), // TextField
+                        ), // TextField
 
-            TextField(
+                        TextField(
               controller: txtSenha,
               obscureText: true,
               style: TextStyle(color: Colors.white),
@@ -99,9 +106,9 @@ class LoginPage extends StatelessWidget {
                 prefixIcon: Icon(Icons.lock_outline),
                 prefixIconColor: Color.fromRGBO(253, 128, 46, 1.0),
               ),
-            ), // TextField
+                        ), // TextField
 
-            ElevatedButton(
+                        ElevatedButton(
               onPressed: () => logar(context),
               child: Text("Entrar"),
               style: ElevatedButton.styleFrom(
@@ -110,9 +117,9 @@ class LoginPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-            ),
+                        ),
 
-            TextButton(
+                        TextButton(
               onPressed: () => Navigator.pushNamed(context, "/registro"),
               child: Text("Registrar"),
               style: ElevatedButton.styleFrom(
@@ -121,8 +128,14 @@ class LoginPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-            ),
-          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

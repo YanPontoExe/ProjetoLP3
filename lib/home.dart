@@ -45,19 +45,21 @@ class _HomeState extends State<Home>
       ),
       backgroundColor: const Color.fromRGBO(64, 61, 57, 1),
       // O conteúdo central muda conforme a aba selecionada.
-      body: PageView(
-        controller: pageController,
-        onPageChanged: (index) {
-          // Atualiza a navbar quando o usuário troca de página por swipe.
-          setState(() {
-            tabIndex = index;
-          });
-        },
-        // Ordem das páginas: ranking, jogo.
-        children: const [
-          Ranking(),
-          GameScreen(),
-        ],
+      body: SafeArea(
+        child: PageView(
+          controller: pageController,
+          onPageChanged: (index) {
+            // Atualiza a navbar quando o usuário troca de página por swipe.
+            setState(() {
+              tabIndex = index;
+            });
+          },
+          // Ordem das páginas: ranking, jogo.
+          children: const [
+            Ranking(),
+            GameScreen(),
+          ],
+        ),
       ),
       // Navbar circular compartilhada entre as abas; o botão 2 redireciona para login.
       bottomNavigationBar: GameNavBar(

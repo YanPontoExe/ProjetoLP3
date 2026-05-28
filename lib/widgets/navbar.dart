@@ -16,6 +16,8 @@ class GameNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).padding.bottom;
+
     // Os três ícones representam ranking, jogo e saída/login, nessa ordem.
     return CircleNavBar(
       activeIcons: const [
@@ -34,7 +36,7 @@ class GameNavBar extends StatelessWidget {
       circleWidth: 60,
       activeIndex: activeIndex,
       onTap: onTap,
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 20),
+      padding: EdgeInsets.only(left: 16, right: 16, bottom: 12 + bottomInset),
       cornerRadius: const BorderRadius.only(
         topLeft: Radius.circular(8),
         topRight: Radius.circular(8),

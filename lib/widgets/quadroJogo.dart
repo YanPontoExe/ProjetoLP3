@@ -38,16 +38,28 @@ class BoardUiWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: List.generate(
-          board.length,
-          (row) => _RowWidget(tiles: board[row]),
-        ),
-      ),
-    );
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final horizontalPadding = constraints.maxWidth < 420 ? 12.0 : 32.0;
+        final tileSize = ((constraints.maxWidth - (horizontalPadding * 2) - 16) / 5)
+            .clamp(34.0, 59.0)
+            .toDouble();
+
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: List.generate(
+              board.length,
+              (row) => Padding(
+                padding: EdgeInsets.only(bottom: row == board.length - 1 ? 0 : 10),
+                child: _RowWidget(tiles: board[row], tileSize: tileSize),
+              ),
+            ),
+          ),
+        );
+      },
+      );
   }
 }
 
@@ -55,17 +67,20 @@ class BoardUiWidget extends StatelessWidget {
 
 class _RowWidget extends StatelessWidget {
   final List<UiTile> tiles;
+  final double tileSize;
 
-  const _RowWidget({required this.tiles});
+  const _RowWidget({required this.tiles, required this.tileSize});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: tiles.map((tile) => _TileWidget(tile: tile)).toList(),
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (int index = 0; index < tiles.length; index++) ...[
+          _TileWidget(tile: tiles[index], tileSize: tileSize),
+          if (index != tiles.length - 1) const SizedBox(width: 10),
+        ],
+      ],
     );
   }
 }
@@ -74,8 +89,9 @@ class _RowWidget extends StatelessWidget {
 
 class _TileWidget extends StatelessWidget {
   final UiTile tile;
+  final double tileSize;
 
-  const _TileWidget({required this.tile});
+  const _TileWidget({required this.tile, required this.tileSize});
 
   // Retorna a cor de fundo baseada no estado da letra
   Color _backgroundColor() {
@@ -101,9 +117,8 @@ class _TileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width:  59,
-      height: 59,
-      margin: const EdgeInsets.all(3),
+      width: tileSize,
+      height: tileSize,
       decoration: BoxDecoration(
         color:  _backgroundColor(),
         border: Border.all(color: _borderColor(), width: 2),
