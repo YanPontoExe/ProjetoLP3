@@ -112,73 +112,97 @@ class _GameScreenState extends State<GameScreen>
       listenable: controller,
       builder: (context, _) {
         final acabou = controller.status != GameStatus.playing; // jogo terminou?
-        return SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 8),
-              BoardUiWidget(board: controller.board), // desenha o tabuleiro do controller
-              const SizedBox(height: 82),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: TextField(
-                  controller: _campo,
-                  enabled: !acabou, // trava o campo quando o jogo termina
-                  onChanged: _aoDigitar, // sincroniza cada mudança com o controller
-                  onSubmitted: (_) => _enviar(), // enviar pelo teclado dispara o chute
-                  scrollPadding: const EdgeInsets.only(bottom: 120),
-                  textAlign: TextAlign.center,
-                  textCapitalization: TextCapitalization.characters, // sugere maiúsculas
-                  maxLength: GameController.wordLength, // no máximo 5 letras
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color.fromRGBO(253, 128, 46, 1.0),
-                        width: 2.0,
-                      ),
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final contentWidth = (constraints.maxWidth - 32)
+                .clamp(0.0, 760.0)
+                .toDouble();
+            final topSpacing = (constraints.maxHeight * 0.04)
+                .clamp(16.0, 48.0)
+                .toDouble();
+            final gapAfterBoard = (constraints.maxHeight * 0.03)
+                .clamp(24.0, 48.0)
+                .toDouble();
+            final gapAfterField = (constraints.maxHeight * 0.015)
+                .clamp(16.0, 28.0)
+                .toDouble();
+
+            return SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              padding: EdgeInsets.fromLTRB(16, topSpacing, 16, 16),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight - topSpacing - 16),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: contentWidth),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        BoardUiWidget(board: controller.board), // desenha o tabuleiro do controller
+                        SizedBox(height: gapAfterBoard),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: TextField(
+                            controller: _campo,
+                            enabled: !acabou, // trava o campo quando o jogo termina
+                            onChanged: _aoDigitar, // sincroniza cada mudança com o controller
+                            onSubmitted: (_) => _enviar(), // enviar pelo teclado dispara o chute
+                            scrollPadding: const EdgeInsets.only(bottom: 120),
+                            textAlign: TextAlign.center,
+                            textCapitalization: TextCapitalization.characters, // sugere maiúsculas
+                            maxLength: GameController.wordLength, // no máximo 5 letras
+                            style: const TextStyle(color: Colors.white),
+                            decoration: const InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color.fromRGBO(253, 128, 46, 1.0),
+                                  width: 2.0,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color.fromRGBO(253, 128, 46, 1.0),
+                                  width: 2.5,
+                                ),
+                              ),
+                              labelText: "Digite sua palavra",
+                              labelStyle: TextStyle(color: Color.fromRGBO(253, 128, 46, 1.0)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: gapAfterField),
+                        // Banner de fim de jogo: só aparece quando o jogo termina.
+                        if (acabou) ...[
+                          Text(
+                            controller.status == GameStatus.won
+                                ? 'Você ganhou!' // vitória
+                                : 'Fim de jogo! A palavra era ${controller.answer}', // derrota mostra a resposta
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Color.fromRGBO(253, 128, 46, 1.0),
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: _jogarDeNovo, // gera uma nova palavra e zera o tabuleiro
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color.fromRGBO(253, 128, 46, 1.0),
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                              textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            child: const Text('Jogar de novo'),
+                          ),
+                        ],
+                      ],
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color.fromRGBO(253, 128, 46, 1.0),
-                        width: 2.5,
-                      ),
-                    ),
-                    labelText: "Digite sua palavra",
-                    labelStyle: TextStyle(color: Color.fromRGBO(253, 128, 46, 1.0)),
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
-              // Banner de fim de jogo: só aparece quando o jogo termina.
-              if (acabou) ...[
-                Text(
-                  controller.status == GameStatus.won
-                      ? 'Você ganhou!' // vitória
-                      : 'Fim de jogo! A palavra era ${controller.answer}', // derrota mostra a resposta
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Color.fromRGBO(253, 128, 46, 1.0),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: _jogarDeNovo, // gera uma nova palavra e zera o tabuleiro
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromRGBO(253, 128, 46, 1.0),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                    textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  child: const Text('Jogar de novo'),
-                ),
-              ],
-            ],
-          ),
+            );
+          },
         );
       },
     );

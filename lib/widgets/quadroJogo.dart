@@ -41,9 +41,19 @@ class BoardUiWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final horizontalPadding = constraints.maxWidth < 420 ? 12.0 : 32.0;
-        final tileSize = ((constraints.maxWidth - (horizontalPadding * 2) - 16) / 5)
-            .clamp(34.0, 59.0)
+        final horizontalPadding = constraints.maxWidth >= 800
+            ? 24.0
+            : constraints.maxWidth < 420
+                ? 12.0
+                : 32.0;
+        final gap = constraints.maxWidth >= 800 ? 12.0 : 10.0;
+        final maxTileSize = constraints.maxWidth >= 800
+            ? 88.0
+            : constraints.maxWidth >= 520
+                ? 72.0
+                : 59.0;
+        final tileSize = ((constraints.maxWidth - (horizontalPadding * 2) - 40) / 5)
+            .clamp(34.0, maxTileSize)
             .toDouble();
 
         return Padding(
@@ -53,8 +63,8 @@ class BoardUiWidget extends StatelessWidget {
             children: List.generate(
               board.length,
               (row) => Padding(
-                padding: EdgeInsets.only(bottom: row == board.length - 1 ? 0 : 10),
-                child: _RowWidget(tiles: board[row], tileSize: tileSize),
+                padding: EdgeInsets.only(bottom: row == board.length - 1 ? 0 : gap),
+                child: _RowWidget(tiles: board[row], tileSize: tileSize, gap: gap),
               ),
             ),
           ),
@@ -69,8 +79,9 @@ class BoardUiWidget extends StatelessWidget {
 class _RowWidget extends StatelessWidget {
   final List<UiTile> tiles;
   final double tileSize;
+  final double gap;
 
-  const _RowWidget({required this.tiles, required this.tileSize});
+  const _RowWidget({required this.tiles, required this.tileSize, required this.gap});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +90,7 @@ class _RowWidget extends StatelessWidget {
       children: [
         for (int index = 0; index < tiles.length; index++) ...[
           _TileWidget(tile: tiles[index], tileSize: tileSize, index: index),
-          if (index != tiles.length - 1) const SizedBox(width: 10),
+          if (index != tiles.length - 1) SizedBox(width: gap),
         ],
       ],
     );
@@ -201,6 +212,8 @@ class _TileWidgetState extends State<_TileWidget>
 
   // Desenha a caixa da tile para um dado estado (a letra é sempre a mesma).
   Widget _box(TileState state) {
+    final fontSize = (widget.tileSize * 0.42).clamp(20.0, 34.0).toDouble();
+
     return Container(
       width: widget.tileSize,
       height: widget.tileSize,
@@ -212,10 +225,9 @@ class _TileWidgetState extends State<_TileWidget>
       child: Text(
         widget.tile.letter,
         style: const TextStyle(
-          fontSize:   28,
           fontWeight: FontWeight.bold,
           color:      Colors.white,
-        ),
+        ).copyWith(fontSize: fontSize),
       ),
     );
   }
