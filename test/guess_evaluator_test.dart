@@ -30,12 +30,13 @@ void main() {
   });
 
   test('marks every letter correct when the guess matches the answer', () {
-    final result = evaluateGuess('TREM', 'TREM');
+    final result = evaluateGuess('METRO', 'METRO');
 
     expectTiles(
       result,
-      ['T', 'R', 'E', 'M'],
+      ['M', 'E', 'T', 'R', 'O'],
       [
+        TileState.correct,
         TileState.correct,
         TileState.correct,
         TileState.correct,
@@ -45,7 +46,7 @@ void main() {
   });
 
   test('marks letters absent when none are in the answer', () {
-    final result = evaluateGuess('CIVIL', 'TREMU');
+    final result = evaluateGuess('CIVIL', 'TERMO');
 
     expectTiles(
       result,
